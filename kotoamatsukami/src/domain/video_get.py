@@ -33,3 +33,7 @@ class VideoGet:
 
         self.stopped = True
 
+    
+    def release(self) -> None:
+        self.stream.release()
+

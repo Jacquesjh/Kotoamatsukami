@@ -41,7 +41,7 @@ class HandDetector:
         else:
             return hands
 
-    # @jit
+
     def _get_hands(self, results, height: int, width: int, draw_marks: bool, draw_box: bool, flip_view: bool, image: np.ndarray) -> List[dict]:
 
         hands = []
@@ -103,6 +103,7 @@ class HandDetector:
 
         return bounding_box
 
+
     @staticmethod
     def _get_landmarks(height: int, width: int, hand_landmarks) -> List[list]:
         
@@ -118,45 +119,3 @@ class HandDetector:
             ys[id] = y
 
         return [my_landmarks, xs, ys]
-
-
-def main():
-    
-    cap = cv2.VideoCapture(0)
-
-    detector = HandDetector(max_hands = 2, detection_con = 0.8)
-    
-    while True:
-        # Get image frame
-        success, img = cap.read()
-        # Find the hand and its landmarks
-        hands, img = detector.find_hands(img, draw_box = False)  # with draw
-        # hands = detector.find_hands(img, draw = False)  # without draw
-
-        if hands:
-            # Hand 1
-            hand1 = hands[0]
-            lmList1 = hand1["landmarks"]  # List of 21 Landmark points
-            bbox1 = hand1["bounding_box"]  # Bounding box info x,y,w,h
-            centerPoint1 = hand1["center"]  # center of the hand cx,cy
-            handType1 = hand1["type"]  # Handtype Left or Right
-
-
-            if len(hands) == 2:
-                # Hand 2
-                hand2 = hands[1]
-                lmList2 = hand2["landmarks"]  # List of 21 Landmark points
-                bbox2 = hand2["bounding_box"]  # Bounding box info x,y,w,h
-                centerPoint2 = hand2["center"]  # center of the hand cx,cy
-                handType2 = hand2["type"]  # Hand Type "Left" or "Right"
-                
-        # Display
-        cv2.imshow("Image", img)
-        cv2.waitKey(1)
-
-    cap.release()
-    cv2.destroyAllWindows()
-
-
-if __name__ == "__main__":
-    main()
