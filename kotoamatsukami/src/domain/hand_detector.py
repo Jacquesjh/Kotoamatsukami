@@ -1,5 +1,4 @@
 
-from threading import Thread
 from typing import Any, List
 
 import cv2
@@ -38,6 +37,9 @@ class HandDetector:
         if results.multi_hand_landmarks:
             hands = self._get_hands(results = results, height = height, width = width,
                                     draw_marks = draw_marks, draw_box = draw_box, image = image)
+        
+        else:
+            hands = []
 
         if draw_marks or draw_box:
             return hands, image
@@ -77,7 +79,7 @@ class HandDetector:
                 mp.solutions.drawing_utils.draw_landmarks(image, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS)
             
             if draw_box:
-                self._draw_box(image = image, hand = hand, hand_landmarks = hand_landmarks)
+                self._draw_box(image = image, hand = hand)
 
         return hands
 
