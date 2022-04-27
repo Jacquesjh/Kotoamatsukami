@@ -1,21 +1,13 @@
 
-from threading import Thread
-
 import cv2
 
 
 class VideoShow:
 
 
-    def __init__(self, frame = None) -> None:        
+    def __init__(self, frame = None) -> None:
         self.frame   = frame
         self.stopped = False
-
-    
-    def start(self) -> None:
-        Thread(target = self.show, args = ()).start()
-
-        return self
 
 
     def show(self) -> None:

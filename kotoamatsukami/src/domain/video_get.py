@@ -1,6 +1,4 @@
 
-from threading import Thread
-
 import cv2
 
 
@@ -11,12 +9,6 @@ class VideoGet:
         self.stream  = cv2.VideoCapture(source)
         self.stopped = False
         self.grabbed, self.frame = self.stream.read()
-
-
-    def start(self):
-        Thread(target = self.update, args = ()).start()
-
-        return self
 
 
     def update(self) -> None:
@@ -34,4 +26,3 @@ class VideoGet:
     
     def release(self) -> None:
         self.stream.release()
-

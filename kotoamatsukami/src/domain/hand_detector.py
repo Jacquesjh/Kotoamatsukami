@@ -95,7 +95,7 @@ class HandDetector:
 
 
     @staticmethod
-    @jit(nopython = True, fastmath = True)
+    # @jit(nopython = True, fastmath = True)
     def _get_bounding_box(xarray: np.ndarray, yarray: np.ndarray) -> tuple:
         box_width    = xarray.max() - xarray.min()
         box_height   = yarray.max() - yarray.min()
