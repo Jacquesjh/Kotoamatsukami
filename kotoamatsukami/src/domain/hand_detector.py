@@ -3,8 +3,10 @@ from typing import Any, List
 
 import cv2
 import mediapipe as mp
-from numba import jit
+# from numba import jit
 import numpy as np
+
+from kotoamatsukami.src.utils import utils
 
 
 class HandDetector:
@@ -17,7 +19,8 @@ class HandDetector:
     tip_ids      : List[int]
 
 
-    def __init__(self, max_hands: int = 2, detection_con: float = 0.5, min_track_con: float = 0.5) -> None:
+    def __init__(self, max_hands: int = 2, detection_con: float = 0.8, min_track_con: float = 0.8, normalize: bool = True) -> None:
+        self.normalize     = normalize
         self.max_hands     = max_hands
         self.detection_con = detection_con
         self.min_track_con = min_track_con
@@ -54,11 +57,17 @@ class HandDetector:
         for hand_type, hand_landmarks in zip(results.multi_handedness, results.multi_hand_landmarks):
             hand   = dict()
             unpack = self._get_landmarks(hand_landmarks = hand_landmarks, height = height, width = width)
-            
-            hand["landmarks"] = unpack[0]
+
+            if self.normalize:
+                hand["landmarks"] = utils.normalize_landmarks(landmarks = unpack[0])
+
+            else:
+                hand["landmarks"] = unpack[0]
+
             xs = unpack[1]
             ys = unpack[2]
             
+                
             hand["bounding_box"] = self._get_bounding_box(xarray = xs, yarray = ys)
             bbox = hand["bounding_box"]
 
@@ -77,7 +86,7 @@ class HandDetector:
 
             if draw_marks:
                 mp.solutions.drawing_utils.draw_landmarks(image, hand_landmarks, mp.solutions.hands.HAND_CONNECTIONS)
-            
+
             if draw_box:
                 self._draw_box(image = image, hand = hand)
 
@@ -86,8 +95,8 @@ class HandDetector:
 
     def _draw_box(self, image: np.ndarray, hand: dict) -> None:
         bbox  = hand["bounding_box"]
-        line1 = bbox[0] - 20, bbox[1] - 20
-        line2 = bbox[0] + bbox[2] + 20, bbox[1] + bbox[3] + 20
+        line1 = bbox[0] - 10, bbox[1] - 10
+        line2 = bbox[0] + bbox[2] + 10, bbox[1] + bbox[3] + 10
 
         cv2.rectangle(image, line1, line2, (255, 0, 255), 2)
         cv2.putText(image, hand["type"], (bbox[0] - 30, bbox[1] - 30),
@@ -110,7 +119,7 @@ class HandDetector:
 
         xs = np.empty(shape = len(hand_landmarks.landmark), dtype = np.int32)
         ys = np.empty(shape = len(hand_landmarks.landmark), dtype = np.int32)
-        
+
         for id, landmark in enumerate(hand_landmarks.landmark):
             x, y = int(landmark.x*width), int(landmark.y*height)
             my_landmarks.append([x, y])
