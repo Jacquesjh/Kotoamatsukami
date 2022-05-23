@@ -1,0 +1,8 @@
+
+CLICKLING:
+
+    You must use "pyautogui.click(642, 462, duration = 0.2)" instead of "pyautogui.click(642, 462)" because otherwise it will click holding either shift or crlt... for some reason.
+
+WRITING:
+
+    Must use "pyautogui.write("something", interval = 0.2)" also, because otherwise it thinks it's a hotkey/command
