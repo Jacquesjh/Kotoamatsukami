@@ -2,7 +2,7 @@
 import cv2
 
 
-class VideoShow:
+class VideoDisplay:
 
 
     def __init__(self, frame = None) -> None:

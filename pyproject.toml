@@ -23,6 +23,9 @@ sklearn = "^0.0"
 pydot = "^1.4.2"
 graphviz = "^0.19.1"
 xgboost = "^1.6.1"
+PyAutoGUI = "^0.9.53"
+winrt = "^1.0.21033"
+pycaw = "^20220416"
 
 [tool.poetry.dev-dependencies]
 ipykernel = "^6.6.1"

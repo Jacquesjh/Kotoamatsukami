@@ -2,7 +2,7 @@
 import cv2
 
 
-class VideoGet:
+class VideoCapture:
 
 
     def __init__(self, source: int = 0) -> None:

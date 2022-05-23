@@ -19,16 +19,14 @@ class HandDetector:
     tip_ids      : List[int]
 
 
-    def __init__(self, max_hands: int = 2, detection_con: float = 0.8, min_track_con: float = 0.8, normalize: bool = True) -> None:
+    def __init__(self, max_hands: int = 2, detection_con: float = 0.8, model_complexity: int = 1, min_track_con: float = 0.8, normalize: bool = True) -> None:
         self.normalize     = normalize
         self.max_hands     = max_hands
         self.detection_con = detection_con
         self.min_track_con = min_track_con
 
         self.hands = mp.solutions.hands.Hands(max_num_hands = max_hands, min_detection_confidence = detection_con,
-                                              min_tracking_confidence = min_track_con, model_complexity = 0)
-
-        self.tip_ids = [4, 8, 12, 16, 20]
+                                              min_tracking_confidence = min_track_con, model_complexity = model_complexity)
 
 
     def find_hands(self, image: np.ndarray, draw_marks: bool = True, draw_box: bool = True) -> tuple:
@@ -66,8 +64,8 @@ class HandDetector:
 
             xs = unpack[1]
             ys = unpack[2]
-            
-                
+
+
             hand["bounding_box"] = self._get_bounding_box(xarray = xs, yarray = ys)
             bbox = hand["bounding_box"]
 
@@ -78,7 +76,7 @@ class HandDetector:
 
             if hand_type.classification[0].label == "Right":
                 hand["type"] = "Left"
-            
+
             else:
                 hand["type"] = "Right"
             
