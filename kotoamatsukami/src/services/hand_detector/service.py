@@ -19,7 +19,7 @@ class HandDetector:
     tip_ids      : List[int]
 
 
-    def __init__(self, max_hands: int = 2, detection_con: float = 0.8, model_complexity: int = 1, min_track_con: float = 0.8, normalize: bool = True) -> None:
+    def __init__(self, max_hands: int = 2, detection_con: float = 0.8, model_complexity: int = 1, min_track_con: float = 0.2, normalize: bool = True) -> None:
         self.normalize     = normalize
         self.max_hands     = max_hands
         self.detection_con = detection_con
