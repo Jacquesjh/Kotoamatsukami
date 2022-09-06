@@ -29,13 +29,13 @@ class HandDetector:
     def find_hands(self, image: np.ndarray, draw_marks: bool = True, draw_box: bool = True) -> tuple:
         img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         results = self.hands_processor.process(img_rgb)
-        
+
         height, width, _color = image.shape
 
         if results.multi_hand_landmarks:
             hands = self._get_hands(results=results, height=height, width=width,
                                     draw_marks=draw_marks, draw_box=draw_box, image=image)
-        
+
         else:
             hands = []
 
