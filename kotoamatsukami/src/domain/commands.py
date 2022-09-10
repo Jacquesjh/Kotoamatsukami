@@ -1,6 +1,4 @@
-
 import pyautogui as pg
-
 
 
 def browser_back() -> None:

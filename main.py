@@ -1,5 +1,4 @@
-
-import  pickle
+import pickle
 from typing import Dict
 
 import cv2
@@ -7,7 +6,6 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 
 from kotoamatsukami import HandDetector
-
 
 
 def load_model() -> RandomForestClassifier:
@@ -28,16 +26,16 @@ def get_gesture_labes() -> Dict[int, str]:
         6: "negative_side",
         7: "negative_up",
         8: "side",
-        9: "up"
+        9: "up",
     }
 
     return labels
 
 
 def normalize(z: float, max: float, min: float) -> float:
-    norm = (z - min)/(max - min)
+    norm = (z - min) / (max - min)
     round_norm = round(norm, 3)
-    
+
     return round_norm
 
 
@@ -56,7 +54,10 @@ def normalize_landmarks(landmarks: list) -> list:
         norm_landmark = list()
 
         for x, y in zip(xs, ys):
-            norm = [normalize(z=x, max=xmax, min=xmin), normalize(z=y, max=ymax, min=ymin)]
+            norm = [
+                normalize(z=x, max=xmax, min=xmin),
+                normalize(z=y, max=ymax, min=ymin),
+            ]
 
             norm_landmark.append(norm)
 
@@ -72,11 +73,15 @@ def main() -> None:
     labels = get_gesture_labes()
 
     model = load_model()
-    hand_detector = HandDetector(max_hands=2, detection_con=0.9, model_complexity=1, normalize=False)
+    hand_detector = HandDetector(
+        max_hands=2, detection_con=0.9, model_complexity=1, normalize=False
+    )
 
     while True:
         _grabbed, raw_frame = stream.read()
-        hands, image = hand_detector.find_hands(image=raw_frame, draw_box=True, draw_marks=True)
+        hands, image = hand_detector.find_hands(
+            image=raw_frame, draw_box=True, draw_marks=True
+        )
 
         cv2.imshow("Video", image)
 
@@ -88,7 +93,7 @@ def main() -> None:
             prediction = model.predict_proba(np.array(norm_landmakrs).reshape(1, 42))
             best_prediction = prediction.argmax()
             print(f"Caught the gesture: {labels.get(best_prediction)}!")
-        
+
     stream.release()
     cv2.destroyAllWindows()
 
